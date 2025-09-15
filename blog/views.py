@@ -87,7 +87,7 @@ def comment_delete(request, slug, comment_id):
     post = get_object_or_404(queryset, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
 
-    if comment.author == request.user:
+    if comment.author == request.user or request.user.is_superuser:
         comment.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
