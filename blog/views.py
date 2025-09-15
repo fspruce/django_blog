@@ -77,7 +77,7 @@ def comment_edit(request, slug, comment_id):
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
             messages.add_message(request, messages.ERROR, 'Error updating comment!')
-    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+    return HttpResponseRedirect(reverse('post_detail', args=[slug]) + "#comment_section")
 
 
 def comment_delete(request, slug, comment_id):
@@ -94,4 +94,22 @@ def comment_delete(request, slug, comment_id):
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
 
-    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+    return HttpResponseRedirect(reverse('post_detail', args=[slug]) + "#comment_section")
+
+
+def toggle_approve_comment(request, slug, comment_id):
+    """
+    view to approve comment
+    """
+    queryset = Post.objects.filter(status=1)
+    post = get_object_or_404(queryset, slug=slug)
+    comment = get_object_or_404(Comment, pk=comment_id)
+
+    if request.user.is_superuser:
+        comment.approved = not comment.approved
+        comment.save()
+        messages.add_message(request, messages.SUCCESS, 'Comment approval status toggled!')
+    else:
+        messages.add_message(request, messages.ERROR, 'You are not authorized to approve comments!')
+
+    return HttpResponseRedirect(reverse('post_detail', args=[slug]) + "#comment_section")

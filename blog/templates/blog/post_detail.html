@@ -45,12 +45,12 @@
   <!-- Displaying Comments -->
   <div class="row">
     <div class="col-md-8 card mb-4 mt-3">
-      <h3>Comments:</h3>
+      <h3 id="comment_section">Comments:</h3>
       <div class="card-body">
         <!-- We want a for loop inside the empty control tags to iterate through each comment in comments -->
         {% for comment in comments %}
         <div
-          class="p-2 comments {% if not comment.approved and comment.author == user %}faded{% elif not comment.approved %}d-none{% endif %}">
+          class="p-2 comments {% if not comment.approved and comment.author == user or not comment.approved and user.is_superuser %}faded{% elif not comment.approved %}d-none{% endif %}">
           <p class="font-weight-bold">{{ comment.author }}
             <span class="font-weight-normal">{{ comment.created_on }}</span>
             wrote:
@@ -66,6 +66,13 @@
           {% endif %}
           {% if user.is_authenticated and comment.author.id == user.id %}
           <button class="btn btn-edit" comment_id="{{ comment.id }}">Edit</button>
+          {% endif %}
+          {% if user.is_authenticated and user.is_superuser %}
+            {% if comment.approved %}
+              <a href="{% url 'toggle_approve_comment' post.slug comment.id %}" class="btn btn-outline-secondary">Unapprove</a>
+            {% else %}
+              <a href="{% url 'toggle_approve_comment' post.slug comment.id %}" class="btn btn-outline-secondary">Approve</a>
+            {% endif %}
           {% endif %}
         </div>
         <!-- Our for loop ends here -->
