@@ -2,3 +2,4 @@
 staticfiles/
 blog/fixtures/
 env.py
+pyproject.toml
