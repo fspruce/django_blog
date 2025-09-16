@@ -9,8 +9,7 @@ class TestAboutView(TestCase):
     def setUp(self):
         """Creates about me content"""
         self.about_content = About(
-            title="About Me",
-            content="this is about me."
+            title="About Me", content="this is about me."
         )
         self.about_content.save()
 
@@ -19,10 +18,9 @@ class TestAboutView(TestCase):
         Verifies get request for about me containing a
         collaboration form.
         """
-        response = self.client.get(reverse('about'))
+        response = self.client.get(reverse("about"))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'About Me', response.content)
+        self.assertIn(b"About Me", response.content)
         self.assertIsInstance(
-            response.context['collaborate_form'],
-            CollaborateForm
+            response.context["collaborate_form"], CollaborateForm
         )

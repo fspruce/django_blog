@@ -8,9 +8,10 @@ class About(models.Model):
     """
     Stores a single about me text.
     """
+
     title = models.CharField(max_length=200)
     updated_on = models.DateTimeField(auto_now=True)
-    profile_image = CloudinaryField('image', default='placeholder')
+    profile_image = CloudinaryField("image", default="placeholder")
     content = models.TextField()
 
     def __str__(self):
@@ -21,6 +22,7 @@ class CollaborateRequest(models.Model):
     """
     Stores a single collaboration request message.
     """
+
     name = models.CharField(max_length=200)
     email = models.EmailField()
     message = models.TextField()
