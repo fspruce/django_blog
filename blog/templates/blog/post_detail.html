@@ -66,10 +66,10 @@
           <p class="approval">This comment is awaiting approval.</p>
           {% endif %}
           {% if user.is_authenticated and comment.author.id == user.id or user.is_authenticated and user.is_superuser %}
-          <button class="btn btn-delete" comment_id="{{ comment.id }}">Delete</button>
+          <button class="btn btn-delete" data-comment_id="{{ comment.id }}">Delete</button>
           {% endif %}
           {% if user.is_authenticated and comment.author.id == user.id %}
-          <button class="btn btn-edit" comment_id="{{ comment.id }}">Edit</button>
+          <button class="btn btn-edit" data-comment_id="{{ comment.id }}">Edit</button>
           {% endif %}
           {% if user.is_authenticated and user.is_superuser %}
             {% if comment.approved %}
