@@ -1,7 +1,6 @@
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.templatetags.static import static
 from django.contrib import messages
 from email.mime.image import MIMEImage
 import os
@@ -31,7 +30,7 @@ def about_me(request):
             name = collaborate_form.cleaned_data['name']
             email = collaborate_form.cleaned_data['email']
             message = collaborate_form.cleaned_data['message']
-            send_ty_email(name, email, message, request)
+            collaboration_email(name, email, message, request)
             collaborate_form.save()
             messages.add_message(
                 request,
@@ -55,7 +54,8 @@ def about_me(request):
     )
 
 
-def send_ty_email(name, email, message, request=None):
+def collaboration_email(name, email, message, request=None):
+    # Thank User
     subject = "Code|Star - Thank you for your request!"
     from_email = None  # Uses DEFAULT_FROM_EMAIL
     to = [email]
@@ -81,7 +81,7 @@ def send_ty_email(name, email, message, request=None):
 
     # HTML version
     html_content = render_to_string(
-        'emails/ty_email.html',
+        'emails/user_notify.html',
         {
             'name': name,
             'message': message,
@@ -98,4 +98,34 @@ def send_ty_email(name, email, message, request=None):
         img.add_header('Content-ID', '<{name}>'.format(name=image))
         img.add_header('Content-Disposition', 'inline', filename=image)
     msg.attach(img)
+    msg.send()
+
+    # Notify Owner
+    subject = "Code|Star - New Collaboration Request Recieved!"
+    from_email = None  # Uses DEFAULT_FROM_EMAIL
+    owner_email = os.environ.get('EMAIL_HOST_USER')
+    to = [owner_email]
+    # Plain text version (fallback)
+    text_content = f"""
+      Collaboration Request Recieved!
+
+      From: {name} ({email})
+      Message:
+            {message}
+      _______________________________________________________________________________
+      Email sent via Code|Star
+      _______________________________________________________________________________
+    """
+
+    # HTML version
+    html_content = render_to_string(
+        'emails/owner_notify.html',
+        {
+            'name': name,
+            'message': message,
+            'email': email,
+        },
+    )
+    msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+    msg.attach_alternative(html_content, "text/html")
     msg.send()
