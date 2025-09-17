@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#333;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:20px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:6px;overflow:hidden;">
+          <tr>
+            <td style="padding:0;">
+              <!-- Banner image -->
+              <img src="cid:default.jpg" alt="banner" style="display:block;width:100%;height:auto;max-height:200px;object-fit:cover;">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px;">
+              <h1 style="margin:0 0 12px 0;color:#2c3e50;font-size:22px;">Hi, {{ name }}!</h1>
+              <p style="margin:0 0 12px 0;line-height:1.4;color:#555;">Thank you for getting in touch with the site regarding a collaboration!</p>
+              <p style="margin:0 0 12px 0;line-height:1.4;color:#555;">I will read through your email as soon as I can, and will let you know how
+                I feel about your request. This usually takes me about 2 days, so in the
+                meantime, why don't you check out the site and see what else we have to offer?</p>
+              <p style="margin:0 0 12px 0;line-height:1.4;color:#555;">Feel free to leave a comment on the blog posts, and enjoy your time here at
+                Code|Star!</p>
+              <p style="margin:0 0 18px 0;line-height:1.4;color:#555;">Cheers,<br>The Code|Star Team.</p>
+              <hr style="border:none;border-top:1px solid #e6e9ed;margin:18px 0;">
+
+              <!-- User message block -->
+              <div style="background:#f9fafb;border:1px solid #eef1f4;padding:14px;border-radius:4px;color:#333;">
+                <strong style="display:block;margin-bottom:8px;color:#2c3e50;">Your message:</strong>
+                <div style="white-space:pre-wrap;line-height:1.5;color:#555;"><strong>{{ title }}</strong><br>{{ message }}</div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+      
