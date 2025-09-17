@@ -1,7 +1,10 @@
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.templatetags.static import static
 from django.contrib import messages
+from email.mime.image import MIMEImage
+import os
 from .models import About
 from .forms import CollaborateForm
 
@@ -28,7 +31,7 @@ def about_me(request):
             name = collaborate_form.cleaned_data['name']
             email = collaborate_form.cleaned_data['email']
             message = collaborate_form.cleaned_data['message']
-            send_ty_email(name, email, message)
+            send_ty_email(name, email, message, request)
             collaborate_form.save()
             messages.add_message(
                 request,
@@ -52,7 +55,7 @@ def about_me(request):
     )
 
 
-def send_ty_email(name, email, message):
+def send_ty_email(name, email, message, request=None):
     subject = "Code|Star - Thank you for your request!"
     from_email = None  # Uses DEFAULT_FROM_EMAIL
     to = [email]
@@ -77,10 +80,22 @@ def send_ty_email(name, email, message):
     """
 
     # HTML version
-    html_content = render_to_string('templates/emails/ty_email.html',
-                                    {'name': name,
-                                     'message': message,
-                                     })
+    html_content = render_to_string(
+        'emails/ty_email.html',
+        {
+            'name': name,
+            'message': message,
+        },
+    )
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+    msg.mixed_subtype = 'related'
     msg.attach_alternative(html_content, "text/html")
-    msg.send
+    img_dir = 'static\\images'
+    image = 'default.jpg'
+    file_path = os.path.join(img_dir, image)
+    with open(file_path, 'rb') as f:
+        img = MIMEImage(f.read())
+        img.add_header('Content-ID', '<{name}>'.format(name=image))
+        img.add_header('Content-Disposition', 'inline', filename=image)
+    msg.attach(img)
+    msg.send()
