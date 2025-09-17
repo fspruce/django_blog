@@ -107,7 +107,7 @@ def collaboration_email(name, email, title, message, request=None):
     # Notify Owner
     subject = f"Code|Star - New Collaboration Request Recieved! | {title}"
     from_email = None  # Uses DEFAULT_FROM_EMAIL
-    owner_email = os.environ.get('EMAIL_HOST_USER')
+    owner_email = os.environ.get('DEFAULT_FROM_EMAIL')
     to = [owner_email]
     # Plain text version (fallback)
     text_content = f"""
