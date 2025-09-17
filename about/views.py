@@ -29,8 +29,9 @@ def about_me(request):
         if collaborate_form.is_valid():
             name = collaborate_form.cleaned_data['name']
             email = collaborate_form.cleaned_data['email']
+            title = collaborate_form.cleaned_data['title']
             message = collaborate_form.cleaned_data['message']
-            collaboration_email(name, email, message, request)
+            collaboration_email(name, email, title, message, request)
             collaborate_form.save()
             messages.add_message(
                 request,
@@ -54,9 +55,9 @@ def about_me(request):
     )
 
 
-def collaboration_email(name, email, message, request=None):
+def collaboration_email(name, email, title, message, request=None):
     # Thank User
-    subject = "Code|Star - Thank you for your request!"
+    subject = f"Code|Star - Thank you for your request! | {title}"
     from_email = None  # Uses DEFAULT_FROM_EMAIL
     to = [email]
     # Plain text version (fallback)
@@ -76,7 +77,9 @@ def collaboration_email(name, email, message, request=None):
       The Code|Star Team.
       _______________________________________________________________________________
       From {name}:
-      {message}
+      Title: {title}
+      Message:
+            {message}
     """
 
     # HTML version
@@ -84,6 +87,7 @@ def collaboration_email(name, email, message, request=None):
         'emails/user_notify.html',
         {
             'name': name,
+            'title': title,
             'message': message,
         },
     )
@@ -101,7 +105,7 @@ def collaboration_email(name, email, message, request=None):
     msg.send()
 
     # Notify Owner
-    subject = "Code|Star - New Collaboration Request Recieved!"
+    subject = f"Code|Star - New Collaboration Request Recieved! | {title}"
     from_email = None  # Uses DEFAULT_FROM_EMAIL
     owner_email = os.environ.get('EMAIL_HOST_USER')
     to = [owner_email]
@@ -110,6 +114,7 @@ def collaboration_email(name, email, message, request=None):
       Collaboration Request Recieved!
 
       From: {name} ({email})
+      Title: {title}
       Message:
             {message}
       _______________________________________________________________________________
@@ -122,6 +127,7 @@ def collaboration_email(name, email, message, request=None):
         'emails/owner_notify.html',
         {
             'name': name,
+            'title': title,
             'message': message,
             'email': email,
         },
