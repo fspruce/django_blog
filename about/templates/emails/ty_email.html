@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container { padding: 20px }
+    h1 { color: #2c3e50 }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hi, {name}!</h1>
+    <p>Thank you for getting in touch with the site regarding a collaboration!</p>
+    <p>I will read through your email as soon as I can, and will let you know how
+      I feel about your request. This usually takes me about 2 days, so in the
+      meantime, why don't you check out the site and see what else we have to offer?</p>
+    <p>Feel free to leave a comment on the blog posts, and enjoy your time here at
+      Code|Star!</p>
+    <p>Cheers,<br>The Code|Star Team.</p>
+    <hr>
+    <p>From {name}:<br>{message}</p><br>
+    <img src="{% static 'images/default.jpg' %}" class="scale" alt="placeholder image">
+  </div>
+</body>
+</html>
+      
