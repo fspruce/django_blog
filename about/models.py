@@ -25,6 +25,7 @@ class CollaborateRequest(models.Model):
 
     name = models.CharField(max_length=200)
     email = models.EmailField()
+    title = models.CharField(max_length=50, default="-")
     message = models.TextField()
     read = models.BooleanField(default=False)
 
